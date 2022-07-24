@@ -66,7 +66,7 @@ jobs:
 
           # diff -r /tmp/before /tmp/after
 
-          find /tmp/before -type f -exec md5sum {} ¥; > /tmp/before.md5sum
+          find /tmp/before -type f -exec md5sum {} \; > /tmp/before.md5sum
           find /tmp/after -type f -exec md5sum -c before.md5sum
 
         shell: bash -xe {0}
