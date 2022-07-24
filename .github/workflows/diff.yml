@@ -16,7 +16,8 @@ jobs:
     steps:
       - name : display infomation
         run: |
-          echo ${{ github.head_ref }}
-          echo ${{ github.base_ref }}
+          echo '1. '${{ github.head_ref }}
+          echo '2. '${{ github.base_ref }}
+        shell: bash -xe {0}
 
 
