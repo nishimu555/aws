@@ -1,12 +1,12 @@
 name: Build and Push
 
 on:
-  push:
-    branches:
-      - "**"
-  # pull_request:
+  # push:
   #   branches:
   #     - "**"
+  pull_request:
+    branches:
+      - "**"
 
 jobs:
   build-and-push:
@@ -14,7 +14,7 @@ jobs:
     timeout-minutes: 300
 
     steps:
-      - name : display infomation
+      - name : display infomation(only pull req)
         run: |
           echo '1. '${{ github.head_ref }}
           echo '2. '${{ github.base_ref }}
