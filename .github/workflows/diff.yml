@@ -1,0 +1,22 @@
+name: Build and Push
+
+on:
+  push:
+    branches:
+      - "**"
+  # pull_request:
+  #   branches:
+  #     - "**"
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+
+    steps:
+      - name : display infomation
+        run: |
+          echo ${{ github.head_ref }}
+          echo ${{ github.base_ref }}
+
+
