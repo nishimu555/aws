@@ -64,7 +64,7 @@ jobs:
           docker cp before-container:/usr/share/nginx/html /tmp/before
           docker cp after-container:/usr/share/nginx/html /tmp/after
 
-          diff -r /tmp/before /tmp/after
+          diff -r /tmp/before /tmp/after > /dev/null
 
         shell: bash -xe {0}
 
