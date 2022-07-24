@@ -76,5 +76,6 @@ jobs:
         run: |
           git add ./diff-test/
           git commit -m "Add tag name"
+          git pull origin ${{ github.ref_name }}
           git push origin ${{ github.ref_name }}
         shell: bash -xe {0}
