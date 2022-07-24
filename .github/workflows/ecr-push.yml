@@ -51,6 +51,8 @@ jobs:
 
           echo $IMAGE_TAG > ./diff-test/tag_name.txt
 
+        shell: bash -xe {0}
+
       - name: Container Testing (curl)
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
@@ -60,9 +62,12 @@ jobs:
           docker run -d -p 80:80 $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           curl http://localhost/
 
+        shell: bash -xe {0}
+
       - name: git setting
         run: |
           git config --local user.name "github-actions-bot"
+        shell: bash -xe {0}
 
       - name: Commit files
         run: |
@@ -70,3 +75,4 @@ jobs:
           git commit -m "Add tag name"
           git pull
           git push origin ${{ github.ref_name }}
+        shell: bash -xe {0}
