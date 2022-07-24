@@ -51,8 +51,6 @@ jobs:
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
-          echo $IMAGE_TAG > ./diff-test/tag_name.txt
-
         shell: bash -xe {0}
 
       - name: Container Testing (curl)
@@ -73,9 +71,16 @@ jobs:
         shell: bash -xe {0}
 
       - name: Commit files
+        env:
+          IMAGE_TAG: ${{ steps.vars.outputs.tag_name }}
         run: |
+          git checkout ${{ github.ref_name }}
+
+          echo $IMAGE_TAG > ./diff-test/tag_name.txt
+
           git add ./diff-test/
           git commit -m "Add tag name"
-          git pull origin ${{ github.ref_name }}
+          # git pull origin ${{ github.ref_name }}
           git push origin ${{ github.ref_name }}
+
         shell: bash -xe {0}
