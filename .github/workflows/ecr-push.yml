@@ -71,4 +71,5 @@ jobs:
           file_pattern: diff-test/**
           commit_user_name: nishimu555
           commit_user_email: ${{ secrets.EMAIL }}
+          branch: ${{ github.ref_name }}
         
