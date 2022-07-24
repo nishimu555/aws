@@ -26,7 +26,7 @@ jobs:
           ref: ${{ github.base_ref }}
 
       - name : read base-branch
-        id: base-branch
+        id: base_branch
         run : |
           echo "base-branch : $(cat ./diff-test/tag_name.txt)"
           echo "::set-output name=tag_name::$(cat ./diff-test/tag_name.txt)"
@@ -35,7 +35,36 @@ jobs:
         uses: actions/checkout@v3
 
       - name : read head-branch
-        id: head-branch
+        id: head_branch
         run : |
           echo "haed-branch : $(cat ./diff-test/tag_name.txt)"
           echo "::set-output name=tag_name::$(cat ./diff-test/tag_name.txt)"
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-1
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Check Container image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: ${{ secrets.AWS_ECR_REPO_NAME }}
+          BEFORE_IMAGE_TAG: ${{ steps.base_branch.outputs.tag_name }}
+          AFTER_IMAGE_TAG: ${{ steps.head_branch.outputs.tag_name }}
+        run: |
+          docker create --name before-container $ECR_REGISTRY/$ECR_REPOSITORY:$BEFORE_IMAGE_TAG
+          docker create --name after-container $ECR_REGISTRY/$ECR_REPOSITORY:$AFTER_IMAGE_TAG
+
+          docker cp before-container:/usr/share/nginx/html /tmp/before
+          docker cp after-container:/usr/share/nginx/html /tmp/after
+
+          diff -r /tmp/before /tmp/after
+
+        shell: bash -xe {0}
+
