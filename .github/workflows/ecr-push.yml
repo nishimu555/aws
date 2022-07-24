@@ -69,6 +69,7 @@ jobs:
       - name: git setting
         run: |
           git config --local user.name "github-actions-bot"
+          git config user.email "github-bot@example.com"
         shell: bash -xe {0}
 
       - name: Commit files
