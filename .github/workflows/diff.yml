@@ -64,7 +64,10 @@ jobs:
           docker cp before-container:/usr/share/nginx/html /tmp/before
           docker cp after-container:/usr/share/nginx/html /tmp/after
 
-          diff -r /tmp/before /tmp/after > /dev/null
+          # diff -r /tmp/before /tmp/after
+
+          find /tmp/before -type f -exec md5sum {} \; > /tmp/before.md5sum
+          find /tmp/after -type f -exec md5sum -c before.md5sum
 
         shell: bash -xe {0}
 
