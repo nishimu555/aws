@@ -8,8 +8,6 @@ on:
         required: true        
 
   push:
-    # branches-ignore:
-    #   - "**"
     tags:
       - v*
 
@@ -50,6 +48,7 @@ jobs:
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          echo $IMAGE_TAG > ./diff-test/tag_name.txt
 
         shell: bash -xe {0}
 
@@ -64,24 +63,12 @@ jobs:
 
         shell: bash -xe {0}
 
-      - name: git setting
-        run: |
-          git config --local user.name "nishimu555"
-          git config user.email ${{ secrets.EMAIL }}
-        shell: bash -xe {0}
-
-      - name: Commit files
-        env:
-          IMAGE_TAG: ${{ steps.vars.outputs.tag_name }}
-        run: |
-          git checkout ${{ github.ref_name }}
-          git pull
-
-          echo $IMAGE_TAG > ./diff-test/tag_name.txt
-
-          git add ./diff-test/
-          git commit -m "Add tag name"
-          # git pull origin ${{ github.ref_name }}
-          git push origin ${{ github.ref_name }}
-
-        shell: bash -xe {0}
+      # https://github.com/marketplace/actions/git-auto-commit
+      - name: code commit
+        uses: stefanzweifel/git-auto-commit-action@v3.0.0
+        with:
+          commit_message: Commit tagname file
+          file_pattern: diff-test/**
+          commit_user_name: nishimu555
+          commit_user_email: ${{ secrets.EMAIL }}
+        
