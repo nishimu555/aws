@@ -20,4 +20,24 @@ jobs:
           echo '2. '${{ github.base_ref }}
         shell: bash -xe {0}
 
+      - name : checkout base-branch
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.base_ref }}
+
+      - name : read base-branch
+        run : |
+          cat ./diff-test/test.txt
+
+      - name : checkout head-branch
+        uses: actions/checkout@v3
+
+      - name : read head-branch
+        run : |
+          cat ./diff-test/test.txt
+
+      # - name : vars
+      #   run : |
+      #    echo "::set-output name=HOGEHOGE::12345"
+
 
