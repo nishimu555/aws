@@ -71,11 +71,13 @@ jobs:
           # afterコードの差分比較
           docker cp after-container:/usr/share/nginx/html /tmp/diff
 
-          find /tmp/diff -type f -exec md5sum {} -c /tmp/check.md5sum \; > /tmp/result.txt
+          find /tmp/diff -type f -exec md5sum {} -c /tmp/check.md5sum \; | grep FAILED > /tmp/result.txt
 
         shell: bash -xe {0}
 
       - name: Add PR comment
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run : |
           # Get pull request number
           number=$(echo $GITHUB_REF | sed -e 's/[^0-9]//g')
