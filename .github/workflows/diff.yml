@@ -79,7 +79,7 @@ jobs:
           cat /tmp/after.md5sum
 
           # https://www.cloudnotes.tech/entry/codebuild-diff-command
-          diff -y /tmp/before.md5sum /tmp/after.md5sum | cat > /tmp/result.txt
+          diff /tmp/before.md5sum /tmp/after.md5sum | cat > /tmp/result.txt
 
         shell: bash -xe {0}
 
