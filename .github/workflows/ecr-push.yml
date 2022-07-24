@@ -23,11 +23,12 @@ jobs:
 
       - name : vars
         run : |
-          if [ ${{ github.event.inputs.tag_name }} != "" ]; then
+          if [ -n "${{ github.event.inputs.tag_name }}" ]; then
             echo "::set-output name=image_tag::${{ github.event.inputs.tag_name }}"
           else
             echo "::set-output name=image_tag::$(echo ${{ github.ref }} | sed -e 's#refs/tags/##g')"
           fi
+        shell: bash -xe {0}
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
