@@ -26,18 +26,16 @@ jobs:
           ref: ${{ github.base_ref }}
 
       - name : read base-branch
+        id: base-branch
         run : |
-          cat ./diff-test/test.txt
+          echo "base-branch : $(cat ./diff-test/tag_name.txt)"
+          echo "::set-output name=tag_name::$(cat ./diff-test/tag_name.txt)"
 
       - name : checkout head-branch
         uses: actions/checkout@v3
 
       - name : read head-branch
+        id: head-branch
         run : |
-          cat ./diff-test/test.txt
-
-      # - name : vars
-      #   run : |
-      #    echo "::set-output name=HOGEHOGE::12345"
-
-
+          echo "haed-branch : $(cat ./diff-test/tag_name.txt)"
+          echo "::set-output name=tag_name::$(cat ./diff-test/tag_name.txt)"
