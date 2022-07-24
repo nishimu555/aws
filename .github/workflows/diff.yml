@@ -74,7 +74,7 @@ jobs:
           docker cp after-container:/usr/share/nginx/html /tmp/diff
 
           # find /tmp/diff -type f -exec md5sum {} -c /tmp/check.md5sum \; > /tmp/result_tmp.txt
-          md5sum -c /tmp/check.md5sum \; > /tmp/result_tmp.txt
+          md5sum -c /tmp/check.md5sum > /tmp/result_tmp.txt
           cat /tmp/result_tmp.txt
           cat /tmp/result_tmp.txt | grep FAILED > /tmp/result.txt
 
