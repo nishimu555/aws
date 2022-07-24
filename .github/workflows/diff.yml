@@ -61,15 +61,17 @@ jobs:
           docker create --name before-container $ECR_REGISTRY/$ECR_REPOSITORY:$BEFORE_IMAGE_TAG
           docker create --name after-container $ECR_REGISTRY/$ECR_REPOSITORY:$AFTER_IMAGE_TAG
 
-          docker cp before-container:/usr/share/nginx/html /tmp/before
-          docker cp after-container:/usr/share/nginx/html /tmp/after
-
-          # diff -r /tmp/before /tmp/after
-
+          # beforeコードからcheck sumを作成
           # https://takuya-1st.hatenablog.jp/entry/20120711/1344804442
-          find /tmp/before -type f -exec md5sum {} \; > /tmp/before.md5sum
-          cat /tmp/before.md5sum
-          find /tmp/after -type f -exec md5sum {} -c before.md5sum \;
+          docker cp before-container:/usr/share/nginx/html /tmp/diff
+          
+          find /tmp/diff -type f -exec md5sum {} \; > /tmp/check.md5sum
+          rm -rf /tmp/diff
+
+          # afterコードの差分比較
+          docker cp after-container:/usr/share/nginx/html /tmp/diff
+
+          find /tmp/diff -type f -exec md5sum {} -c check.md5sum \;
 
         shell: bash -xe {0}
 
